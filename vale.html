@@ -3,35 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vale VIP 15 Años - Krishna - Stray Kids</title>
+    <title>Vale VIP 15 Años - Krishna</title>
+    <!-- Librería html2pdf -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;0,900;1,400&display=swap');
 
         body {
             font-family: 'Montserrat', sans-serif;
-            background-color: #ffffff; /* Fondo blanco para la página, el ticket será oscuro */
+            background-color: #f0f0f0; 
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
+            padding: 20px;
         }
 
-        .ticket-container {
+        /* Botón de descarga */
+        .btn-descarga {
+            background-color: #a6101e;
+            color: #ffffff;
+            border: none;
+            padding: 12px 25px;
+            font-size: 16px;
+            font-weight: bold;
+            font-family: 'Montserrat', sans-serif;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(166, 16, 30, 0.4);
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .btn-descarga:hover {
+            background-color: #850c18;
+            transform: scale(1.05);
+        }
+
+        /* Contenedor exacto del Ticket */
+        #ticket-export {
             display: flex;
             width: 850px;
             height: 350px;
             background-color: #0d0d0d;
             color: #ffffff;
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             overflow: hidden;
             position: relative;
             border: 2px solid #333;
+            box-sizing: border-box;
         }
 
-        /* Texturas y decoración */
-        .ticket-container::before {
+        #ticket-export::before {
             content: '';
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -59,144 +84,39 @@
             align-items: center;
             padding: 20px;
             text-align: center;
-            position: relative;
+            box-sizing: border-box;
         }
 
-        /* Recortes de ticket */
-        .right-section::before, .right-section::after {
-            content: '';
-            position: absolute;
-            left: -16px;
-            width: 30px;
-            height: 30px;
-            background-color: #ffffff;
-            border-radius: 50%;
-            z-index: 2;
-        }
-        .right-section::before { top: -15px; }
-        .right-section::after { bottom: -15px; }
+        .header-title { color: #a6101e; font-size: 14px; letter-spacing: 4px; text-transform: uppercase; font-weight: 900; margin-bottom: 5px; }
+        .sub-title { color: #888; font-size: 12px; letter-spacing: 2px; margin-bottom: 15px; }
+        .name { font-size: 42px; font-weight: 900; color: #ffffff; margin: 0 0 15px 0; text-transform: uppercase; letter-spacing: 2px; text-shadow: 2px 2px 0px #a6101e; }
+        .info-bar { display: flex; gap: 20px; background-color: rgba(166, 16, 30, 0.1); padding: 10px 15px; border-left: 4px solid #a6101e; margin-bottom: 20px; }
+        .info-item { font-size: 13px; }
+        .info-item span { color: #a6101e; font-weight: 700; }
+        .message { font-size: 12px; color: #cccccc; font-style: italic; line-height: 1.5; margin-bottom: 15px; }
+        .from { font-size: 13px; font-weight: 700; }
+        .from span { color: #a6101e; }
+        .quote { margin-top: 15px; font-size: 14px; font-weight: 900; color: #a6101e; letter-spacing: 1px; }
 
-        /* Tipografía y estilos internos */
-        .header-title {
-            color: #a6101e;
-            font-size: 14px;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            font-weight: 900;
-            margin-bottom: 5px;
-        }
+        .qr-header { color: #a6101e; font-size: 18px; font-weight: 900; letter-spacing: 2px; margin-bottom: 15px; line-height: 1.2; }
+        .qr-container { background-color: white; padding: 10px; border-radius: 8px; margin-bottom: 15px; }
+        .qr-container img { display: block; width: 130px; height: 130px; }
+        .qr-text { font-size: 10px; color: #999; line-height: 1.4; }
+        .watermark { position: absolute; font-size: 80px; font-weight: 900; color: rgba(255, 255, 255, 0.03); top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-15deg); pointer-events: none; white-space: nowrap; }
 
-        .sub-title {
-            color: #888;
-            font-size: 12px;
-            letter-spacing: 2px;
-            margin-bottom: 15px;
-        }
-
-        .name {
-            font-size: 42px;
-            font-weight: 900;
-            color: #ffffff;
-            margin: 0 0 15px 0;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            text-shadow: 2px 2px 0px #a6101e;
-        }
-
-        .info-bar {
-            display: flex;
-            gap: 20px;
-            background-color: rgba(166, 16, 30, 0.1);
-            padding: 10px 15px;
-            border-left: 4px solid #a6101e;
-            margin-bottom: 20px;
-        }
-
-        .info-item {
-            font-size: 13px;
-        }
-
-        .info-item span {
-            color: #a6101e;
-            font-weight: 700;
-        }
-
-        .message {
-            font-size: 12px;
-            color: #cccccc;
-            font-style: italic;
-            line-height: 1.5;
-            margin-bottom: 15px;
-        }
-
-        .from {
-            font-size: 13px;
-            font-weight: 700;
-        }
-
-        .from span {
-            color: #a6101e;
-        }
-
-        .quote {
-            margin-top: 15px;
-            font-size: 14px;
-            font-weight: 900;
-            color: #a6101e;
-            letter-spacing: 1px;
-        }
-
-        /* Lado Derecho (QR) */
-        .qr-header {
-            color: #a6101e;
-            font-size: 18px;
-            font-weight: 900;
-            letter-spacing: 2px;
-            margin-bottom: 15px;
-            line-height: 1.2;
-        }
-
-        .qr-container {
-            background-color: white;
-            padding: 10px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-        }
-
-        .qr-container img {
-            display: block;
-            width: 130px;
-            height: 130px;
-        }
-
-        .qr-text {
-            font-size: 10px;
-            color: #999;
-            line-height: 1.4;
-        }
-
-        .watermark {
-            position: absolute;
-            font-size: 80px;
-            font-weight: 900;
-            color: rgba(255, 255, 255, 0.03);
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(-15deg);
-            pointer-events: none;
-            white-space: nowrap;
-        }
     </style>
 </head>
 <body>
 
-    <div class="ticket-container">
+    <button class="btn-descarga" onclick="descargarPDF()">📥 Descargar Vale VIP en PDF</button>
+
+    <!-- Contenedor que será convertido a PDF -->
+    <div id="ticket-export">
         <div class="watermark">STRAY KIDS</div>
         
         <div class="left-section">
             <div class="header-title">★ S T R A Y  K I D S  ×  K A I Z E N ★</div>
             <div class="sub-title">15TH BIRTHDAY SPECIAL VIP GIFT PASS</div>
-            
             <h1 class="name">KRISHNA</h1>
             
             <div class="info-bar">
@@ -215,17 +135,40 @@
 
         <div class="right-section">
             <div class="qr-header">ESCANEAR<br>CONTADOR</div>
-            
             <div class="qr-container">
-                <!-- URL Generada a partir de la API de QR con tu enlace de Github -->
                 <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://km3011.github.io/krishna-regalo/index.html" alt="Código QR">
             </div>
-            
             <div class="qr-text">
                 Abre la cámara de tu móvil para ver el contador en vivo de tus 15 días restantes.
             </div>
         </div>
     </div>
+
+    <script>
+        function descargarPDF() {
+            const elemento = document.getElementById('ticket-export');
+            
+            // Configuración óptima para conservar el fondo y alta calidad
+            const opciones = {
+                margin:       0,
+                filename:     'Vale_15_Anos_Krishna_Stray_Kids.pdf',
+                image:        { type: 'jpeg', quality: 1.0 },
+                html2canvas:  { 
+                    scale: 3,             // Mayor escala = mejor resolución
+                    useCORS: true,        // Permite cargar el QR externo
+                    backgroundColor: '#0d0d0d' // Fuerza el fondo oscuro en la exportación
+                },
+                jsPDF:        { 
+                    unit: 'px', 
+                    format: [850, 350],   // Formato exacto del ticket (Ancho x Alto)
+                    orientation: 'landscape' 
+                }
+            };
+
+            // Ejecuta la conversión a PDF
+            html2pdf().set(opciones).from(elemento).save();
+        }
+    </script>
 
 </body>
 </html>
